@@ -1,71 +1,83 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stage, Layer } from "react-konva"
-import { createGrid, createCells } from './util/grid'
+import { GameOfLife, toggleCellAlive } from './util/grid'
+import Cell from './components/shapes/cell'
+import { connect } from 'react-redux'
+import { createCells } from './store/actions';
+// GLOBALS
+const __SCREEN_WIDTH__ = 800
+const __SCREEN_HEIGHT__ = 800
+const ___CELL_SIZE__ = 32
 
-class App extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      grid_data: [],
-      cells: [],
-      dimensions: {
-        width: 800,
-        height: 800,
-        grid_size: 32,
-        cols: 0,
-        rows: 0
-      }
-    }
+const __GRID_ROWS__ = __SCREEN_HEIGHT__ / ___CELL_SIZE__
+const __GRID_COLS__ = __SCREEN_WIDTH__ / ___CELL_SIZE__
+
+
+const App = (props) => {
+  // EDITOR SETTINGS
+  const { createCells, cells } = props
+  const [startSimulation, setStartSimulation] = useState(false)
+
+  // const [cells, setCells] = useState(props.createCells(__GRID_COLS__, __GRID_ROWS__))
+
+  const [dimensions, setDimensions] = useState({
+    width: __SCREEN_WIDTH__,
+    height: __SCREEN_HEIGHT__,
+    grid_size: ___CELL_SIZE__,
+    cols: __GRID_COLS__,
+    rows: __GRID_ROWS__
+  })
+  useEffect(() => {
+    createCells(__GRID_COLS__, __GRID_ROWS__)
+  }, [])
+  useEffect(() => {
+    if (startSimulation)
+      var loop = setInterval(() => {
+        // GameOfLife(cells, setCells)
+      }, 1000)
+
+    console.log('STOPPING')
+    return () => clearInterval(loop)
+
+  }, [startSimulation])
+
+  const togglePlay = () => {
+    setStartSimulation(!startSimulation)
   }
-
-  componentWillMount = () => {
-    this.setState(({ dimensions }) => (
-      {
-        dimensions: {
-          ...dimensions,
-          cols: this.state.dimensions.width / this.state.dimensions.grid_size,
-          rows: this.state.dimensions.height / this.state.dimensions.grid_size,
-        }
-      }
-    ))
+  const setAlive = (e) => {
+    console.log("clicked ", e.target.attrs.id)
+    // toggleCellAlive(cells, e.target.attrs.id, setCells)
+    console.table(cells)
   }
-  componentDidMount = () => {
-    const { cols, rows } = this.state.dimensions
+  return (
+    <div className="App">
+      <Stage className="game-view" width={dimensions.width} height={dimensions.height}>
+        <Layer>
+          {
+            cells.map(
+              (row, i) => row.map(
+                (cell, j) => <Cell id={`${i}-${j}`} key={`${i}-${j}`} x={i} y={j} setAlive={setAlive} alive={cell.alive} />,
+              )
+            )
+          }
+        </Layer>
+      </Stage>
 
-    const grid = createGrid(cols, rows)
-
-    if (this.state.grid_data.length === 0) {
-      this.setState(() => ({ grid_data: grid }));
-    }
-
-    this.setState(() => ({ cells: createCells(cols, rows) }))
-  }
-  toggleCell = (e) => {
-    console.log(e.target)
-    console.log(e.target)
-  }
-  render() {
-    const { width, height } = this.state.dimensions
-
-    return (
-      <div className="App">
-        <Stage className="game-view" width={width} height={height}>
-          <Layer onClick={this.toggleCell}>
-            {
-              this.state.grid_data.length > 0 ?
-                this.state.cells.map(
-                  row => row.map(
-                    cell => cell
-                  )
-                )
-                : null
-            }
-          </Layer>
-        </Stage>
+      <div className="controls">
+        <button onClick={togglePlay}>{`${startSimulation ? "Stop" : "Play"}`}</button>
       </div>
-    );
+    </div>
+  );
+}
+
+const __props = (store) => {
+  return {
+    cells : store.cells
   }
 }
 
+const __actions_list = {
+  createCells
+}
 
-export default App;
+export default connect(__props, __actions_list)(App);
