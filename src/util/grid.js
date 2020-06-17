@@ -1,6 +1,3 @@
-import React from 'react'
-import Cell from '../components/shapes/cell'
-
 const createGrid = (cols, rows) => {
     var _grid = new Array(cols)
     for (let x = 0; x < _grid.length; x++) {
@@ -11,21 +8,73 @@ const createGrid = (cols, rows) => {
     return _grid
 }
 
-const createCells = (cols, rows) => {
-    var _cells = []
-    for (let x = 0; x < cols; x++) {
-        _cells.push([])
-        for (let y = 0; y < rows; y++) {
-            const val = Math.floor(Math.random() * 2) + 1
-            _cells[x].push(<Cell key={`${x}-${y}`} x={x} y={y} isAlive={val === 1 ? true : false} />)
+
+export const toggleCellAlive = (cells, id, cb) => {
+    cb([...cells,
+    cells.filter((rows, i) =>
+        rows.filter((_cell, j) => {
+            if (_cell.id === id) {
+                _cell.isAlive = !_cell.isAlive
+                console.log("found one ", _cell)
+            }
+        }
+        ))
+    ])
+}
+
+// The Game of Life algorithm
+export const GameOfLife = (cells, updateCells, options = { cols: 25, rows: 25 }) => {
+    // // double buffer
+    // const { cols, rows } = options
+
+    // var next_generation = createCells(cols, rows)
+
+    // cells.map(row =>
+    //     row.map(_cell => {
+    //         console.log(_cell)
+    //         const { isAlive, x, y } = _cell.props
+    //         var neighbors = countNeighbors(cells, x, y, cols, rows)
+
+    //         // RULE 1
+    //         if (isAlive && neighbors === 3) {
+    //             console.log("RULE 1 DEATH MET!")
+    //             next_generation[x][y].props.setAlive(false)
+    //         }
+    //         // RULE 2
+    //         else if (!isAlive && (neighbors > 2 || neighbors < 3)) {
+    //             console.log("RULE 2 BIRTH MET!")
+    //             next_generation[x][y].props.setAlive(true)
+
+    //         }
+    //         // RULE 3
+    //         else {
+    //             console.log("RULE 3 STASIS")
+    //             next_generation[x][y].props.setAlive(isAlive)
+
+    //         }
+    //         return 1
+    //     }))
+
+    // updateCells(next_generation)
+}
+
+
+const countNeighbors = (cells, x, y, cols, rows) => {
+    var __sum = 0
+    for (let i = -1; i < 2; i++) {
+        for (let j = -1; j < 2; j++) {
+            // if (cells[i + x][j + x].props.isAlive) {
+            //     __sum += 1
+            // }
+            let col = (x + i + cols) % cols
+            let row = (y + j + rows) % rows
+            __sum += cells[col][row].props.isAlive === true ? 1 : 0
         }
     }
-    return _cells
-}
 
-const toggleCellAlive = (e) => {
-    // console.log(e.target)
+    __sum -= cells[x][y].props.isAlive === true ? 1 : 0
+    return __sum
 
 }
 
-export { createCells, createGrid }
+export { createGrid }
