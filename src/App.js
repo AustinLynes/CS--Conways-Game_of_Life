@@ -3,49 +3,40 @@ import { Stage, Layer } from "react-konva"
 import Cell from './components/shapes/cell'
 import { connect } from 'react-redux'
 import { createCells, toggleCell, handleLife } from './store/actions';
-// GLOBALS
-const __SCREEN_WIDTH__ = 800
-const __SCREEN_HEIGHT__ = 800
-const ___CELL_SIZE__ = 32
-
-const __GRID_ROWS__ = __SCREEN_HEIGHT__ / ___CELL_SIZE__
-const __GRID_COLS__ = __SCREEN_WIDTH__ / ___CELL_SIZE__
 
 
 const App = (store) => {
   // EDITOR SETTINGS
-  const { cells, createCells, toggleCell, handleLife, is_toggling, generation, is_generating, population } = store
+  const { 
+    cells,
+    createCells,
+    toggleCell,
+    handleLife,
+    is_toggling,
+    generation,
+    is_generating, 
+    population,
+    dimensions } = store
 
   const [startSimulation, setStartSimulation] = useState(false)
-  // const [cells, setCells] = useState(store.cells)
-
-  const [dimensions, setDimensions] = useState({
-    width: __SCREEN_WIDTH__,
-    height: __SCREEN_HEIGHT__,
-    grid_size: ___CELL_SIZE__,
-    cols: __GRID_COLS__,
-    rows: __GRID_ROWS__
-  })
-
-
-  // useEffect(() => {
-  //   console.log("MOUNTED")
-  //   createCells(__GRID_COLS__, __GRID_ROWS__)
-  // }, [])
 
   /**
    *  SIMULATION LOOP, WILL END EITHER IF THE STOP BUTTON IS PRESSED OR IF THE GAME STATE REACHES GAME_OVER
    */
+
+   useEffect(()=>{
+    createCells(dimensions.cols, dimensions.rows)
+   },[])
   useEffect(() => {
     if (startSimulation) {
-
+      
       var simulate = setInterval(() => {
         console.log("simulating")
         if (population > 0) {
-          handleLife(cells)
+          handleLife(dimensions.cols, dimensions.rows)
         } else {
           setStartSimulation(false)
-          createCells(__GRID_COLS__, __GRID_ROWS__)
+          createCells(dimensions.cols, dimensions.rows)
         }
       }, 0)
     }
@@ -55,8 +46,9 @@ const App = (store) => {
 
 
   useEffect(() => {
+    createCells(dimensions.cols, dimensions.rows)
     // setCells(store.cells)
-  }, [is_toggling, is_generating])
+  }, [dimensions.cols, dimensions.rows])
 
   const togglePlay = () => {
     setStartSimulation(!startSimulation)
@@ -88,7 +80,9 @@ const App = (store) => {
       </Stage>
 
       <div className="controls">
-        <button onClick={togglePlay}>{`${startSimulation ? "Stop" : "Play"}`}</button>
+        <button onClick={()=>{setStartSimulation(true)}}>Start Simulation</button>
+        <button onClick={()=>{setStartSimulation(false)}}>Pause Simulation</button>
+        <button onClick={()=>{createCells(dimensions.cols, dimensions.rows)}}>Clear Cells</button>
       </div>
     </div>
   );
@@ -100,7 +94,8 @@ const __props = (store) => {
     is_toggling: store.is_toggling,
     is_generating: store.is_generating,
     generation: store.generation,
-    population: store.population
+    population: store.population,
+    dimensions: store.dimensions
   }
 }
 

@@ -14,16 +14,10 @@ export const CREATE_NEXT_GENERATION_END = "CREATE_NEXT_GENERATION_END"
  * @example createCells(3,3) =>
  * [row[col, col, col], row[col, col col], row[col, col, col]]
 */
-export const createCells = (cols, rows) => dispatch => {
-    var _cells = []
+export const createCells = () => dispatch => {
+    
     dispatch({ type: CREATE_CELLS_START })
-    for (let x = 0; x < cols; x++) {
-        _cells.push([])
-        for (let y = 0; y < rows; y++)
-            _cells[x].push({ id: `${x}-${y}`, x: x, y: y, isAlive: false })
-    }
-
-    dispatch({ type: CREATE_CELLS_FINISHED, payload: _cells })
+    dispatch({ type: CREATE_CELLS_FINISHED })
 }
 /**
  * @description 
@@ -39,11 +33,11 @@ export const toggleCell = (id) => dispatch => {
 }
 
 
-const createNextGeneration = ()  => {
+const createNextGeneration = (cols, rows)  => {
     var _cells = []
-    for (let x = 0; x < 25; x++) {
+    for (let x = 0; x < cols; x++) {
         _cells.push([])
-        for (let y = 0; y < 25; y++)
+        for (let y = 0; y < rows; y++)
             _cells[x].push({ id: `${x}-${y}`, x: x, y: y, isAlive: false })
     }
     return _cells
@@ -54,12 +48,12 @@ const createNextGeneration = ()  => {
  * @description ---tbd
  * 
  * */ 
-export const handleLife = (cells) => dispatch => {
+export const handleLife = (cols, rows) => dispatch => {
     // const { cols, rows } = options
 
     // var next_generation = createCells(cols, rows) 
     // DISPATCH ----- create generation.  ----- seccond buffer.
-    const next_generation = createNextGeneration()
+    const next_generation = createNextGeneration(cols, rows)
     dispatch({type:CREATE_NEXT_GENERATION_START, payload: next_generation})
     // cells.map(row =>
     //     row.map(_cell => {

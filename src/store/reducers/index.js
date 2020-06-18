@@ -1,11 +1,25 @@
 import { CREATE_CELLS_FINISHED, CREATE_CELLS_START, TOGGLE_CELL, TOGGLE_CELL_END, SAVE, CREATE_NEXT_GENERATION_START, CREATE_NEXT_GENERATION_END } from "../actions"
 
+// GLOBALS
+const __GRID_WIDTH__ = 800
+const __GRID_HEIGHT__ = 800
+const ___CELL_SIZE__ = 32
+const __GRID_ROWS__ = __GRID_HEIGHT__ / ___CELL_SIZE__
+const __GRID_COLS__ = __GRID_WIDTH__ / ___CELL_SIZE__
+
 const init = {
     cells: JSON.parse(window.localStorage.getItem("cell_matrix")) || [],
     is_generating: false,
     is_toggling: false,
     generation: 0,
-    population: 0
+    population: 0,
+    dimensions: {
+        width: __GRID_WIDTH__,
+        height: __GRID_HEIGHT__,
+        grid_size: ___CELL_SIZE__,
+        cols: __GRID_COLS__,
+        rows: __GRID_ROWS__
+    }
 }
 
 export function gridReducer(state = init, action) {
@@ -17,35 +31,43 @@ export function gridReducer(state = init, action) {
                 is_generating: true
             }
         case CREATE_CELLS_FINISHED:
+            var _cells = []
+            for (let x = 0; x < state.dimensions.cols; x++) {
+                _cells.push([])
+                for (let y = 0; y < state.dimensions.rows; y++)
+                    _cells[x].push({ id: `${x}-${y}`, x: x, y: y, isAlive: false })
+            }
+
             return {
                 ...state,
-                cells: action.payload,
+                cells: _cells,
                 is_generating: false
             }
         // EDITOR ---
         case TOGGLE_CELL:
             var count = 0
-            const updateCells = () =>
-                state.cells.filter((rows) =>
-                    rows.filter((_cell) => {
-                        if (_cell.id === action.payload) {
-                            _cell.isAlive = !_cell.isAlive
-                            if (_cell.isAlive) {
+            const updateCells = () => {
+                const l_cells = state.cells
+                for (let x = 0; x < state.dimensions.cols; x++) {
+                    for (let y = 0; y < state.dimensions.rows; y++) {
+                        if (l_cells[x][y].id === action.payload) {
+                            l_cells[x][y].isAlive = !state.cells[x][y].isAlive
+                            if (l_cells[x][y].isAlive) {
                                 count += 1
-                            } else {
+                            }
+                            else {
                                 count -= 1
                             }
-                        } else {
-                            _cell.isAlive = _cell.isAlive
-
                         }
-                    }))
-
+                    }
+                }
+                return l_cells
+            }
             return {
                 ...state,
                 cells: updateCells(),
                 is_toggling: true,
-                population: state.population += count 
+                population: state.population += count
             }
         case TOGGLE_CELL_END:
             return {
@@ -54,51 +76,43 @@ export function gridReducer(state = init, action) {
             }
 
         case CREATE_NEXT_GENERATION_START:
-            const countNeighbors = (cells, x, y, cols, rows) => {
+            const countNeighbors = (x, y) => {
                 var sum = 0
                 for (let i = -1; i < 2; i++) {
                     for (let j = -1; j < 2; j++) {
-                        // if (cells[i + x][j + x].props.isAlive) {
-                        //     __sum += 1
-                        // }
-                        let col = (x + i + cols) % cols
-                        let row = (y + j + rows) % rows
-                        sum += cells[col][row].isAlive === true ? 1 : 0
+                        let col = (x + i + state.dimensions.cols) % state.dimensions.cols
+                        let row = (y + j + state.dimensions.rows) % state.dimensions.rows
+                        sum += state.cells[col][row].isAlive === true ? 1 : 0
                     }
                 }
 
-                sum -= cells[x][y].isAlive === true ? 1 : 0
-                // DISPATCH --- count neighbors end
+                sum -= state.cells[x][y].isAlive === true ? 1 : 0
                 return sum
             }
 
-            var next_generaton = action.payload
             var count = 0
-            var generate = () => {
-
-                state.cells.filter((rows, x) =>
-                    rows.filter((_cell, y) => {
-                        //----- count neighbors -----
-                        const neighbors = countNeighbors(state.cells, x, y, 25, 25)
-                        //---- apply rules ----
-                        if (_cell.isAlive === false && neighbors === 3) {
+            var handle_life = () => {
+                var next_generaton = action.payload
+                for (let x = 0; x < state.dimensions.cols; x++) {
+                    for (let y = 0; y < state.dimensions.rows; y++) {
+                        const neighbors = countNeighbors(x, y)
+                        const prev_state = state.cells[x][y].isAlive
+                        if(prev_state === false && neighbors === 3){
                             next_generaton[x][y].isAlive = true
-                            count += 1
-                        } else if (_cell.isAlive === true && (neighbors < 2 || neighbors > 3)) {
+                        }else if(prev_state === true && (neighbors < 2 || neighbors > 3)){
                             next_generaton[x][y].isAlive = false
-                            count -= 1
-                        } else {
-                            next_generaton[x][y].isAlive = _cell.isAlive
+                        }else{
+                            next_generaton[x][y].isAlive = prev_state
                         }
-                    }))
-
+                    }
+                }
                 return next_generaton
             }
             return {
                 ...state,
-                cells: generate(),
+                cells: handle_life(),
                 is_generating: true,
-                generation: state.generation += 1,
+                generation: state.generation + 1,
                 population: state.population + count
             }
         case CREATE_NEXT_GENERATION_END:
@@ -107,6 +121,8 @@ export function gridReducer(state = init, action) {
                 is_generating: false
 
             }
+        case "CLEAR":
+            
         case SAVE:
             window.localStorage.setItem("cell_matrix", JSON.stringify(state.cells))
             return state
