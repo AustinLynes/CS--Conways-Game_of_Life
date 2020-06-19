@@ -1,14 +1,14 @@
 import { CREATE_CELLS_FINISHED, CREATE_CELLS_START, TOGGLE_CELL, TOGGLE_CELL_END, SAVE, CREATE_NEXT_GENERATION_START, CREATE_NEXT_GENERATION_END } from "../actions"
 
 // GLOBALS
-const __GRID_WIDTH__ = 800
-const __GRID_HEIGHT__ = 800
-const ___CELL_SIZE__ = 32
+const __GRID_WIDTH__ = 1280
+const __GRID_HEIGHT__ = 912
+const ___CELL_SIZE__ = 16
 const __GRID_ROWS__ = __GRID_HEIGHT__ / ___CELL_SIZE__
 const __GRID_COLS__ = __GRID_WIDTH__ / ___CELL_SIZE__
 
 const init = {
-    cells: JSON.parse(window.localStorage.getItem("cell_matrix")) || [],
+    cells: [],
     is_generating: false,
     is_toggling: false,
     generation: 0,

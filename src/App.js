@@ -7,14 +7,14 @@ import { createCells, toggleCell, handleLife } from './store/actions';
 
 const App = (store) => {
   // EDITOR SETTINGS
-  const { 
+  const {
     cells,
     createCells,
     toggleCell,
     handleLife,
     is_toggling,
     generation,
-    is_generating, 
+    is_generating,
     population,
     dimensions } = store
 
@@ -24,21 +24,18 @@ const App = (store) => {
    *  SIMULATION LOOP, WILL END EITHER IF THE STOP BUTTON IS PRESSED OR IF THE GAME STATE REACHES GAME_OVER
    */
 
-   useEffect(()=>{
+  useEffect(() => {
     createCells(dimensions.cols, dimensions.rows)
-   },[])
+  }, [])
   useEffect(() => {
     if (startSimulation) {
-      
+
       var simulate = setInterval(() => {
         console.log("simulating")
         if (population > 0) {
           handleLife(dimensions.cols, dimensions.rows)
-        } else {
-          setStartSimulation(false)
-          createCells(dimensions.cols, dimensions.rows)
-        }
-      }, 0)
+        } 
+      }, 144)
     }
     return () => clearInterval(simulate)
 
@@ -50,10 +47,6 @@ const App = (store) => {
     // setCells(store.cells)
   }, [dimensions.cols, dimensions.rows])
 
-  const togglePlay = () => {
-    setStartSimulation(!startSimulation)
-  }
-
   return (
     <div className="App">
 
@@ -63,26 +56,35 @@ const App = (store) => {
             cells.map(
               (row, x) => row.map(
                 (cell, y) => <Cell
-                  cells={cells}
                   id={`${cell.x}-${cell.y}`}
                   key={`${cell.x}-${cell.y}`}
                   x={cell.x}
                   y={cell.y}
+                  width={dimensions.grid_size}
+                  height={dimensions.grid_size}
                   toggleCell={toggleCell}
                   isAlive={cell.isAlive}
-                  is_toggling={is_toggling}
-                  is_generating={is_generating}
-                  generation={generation} />,
+                />,
               )
             )
           }
         </Layer>
       </Stage>
-
+      <div className="guide">
+          <div className="rules">
+            <h3>Rules</h3>
+            <ul>
+              <li>A Cell Who is Alive, and has 1 or less neighboring cells who are alive. dies. as if from lonleiness</li>
+              <li>A Cell Who is Alive, and has 2 or 3 neighboring cells who are alive. <span className="highlight">lives on </span>to the next generation</li>
+              <li>A Cell Who is Alive, and has more than 3 neighboring cells who are alive. dies. as if from <span className="highlight" >overpopulation</span></li>
+              <li>A Cell Who is Dead, and has exactly 3 neighboring cells who are alive. becomes alive. as if from <span className="highlight">reproduction</span></li>
+            </ul>
+          </div>
+      </div>
       <div className="controls">
-        <button onClick={()=>{setStartSimulation(true)}}>Start Simulation</button>
-        <button onClick={()=>{setStartSimulation(false)}}>Pause Simulation</button>
-        <button onClick={()=>{createCells(dimensions.cols, dimensions.rows)}}>Clear Cells</button>
+        <button onClick={() => { setStartSimulation(true) }}>Start Simulation</button>
+        <button onClick={() => { setStartSimulation(false) }}>Pause Simulation</button>
+        <button onClick={() => {  setStartSimulation(false);createCells(dimensions.cols, dimensions.rows) }}>Clear Cells</button>
       </div>
     </div>
   );
