@@ -1,0 +1,20 @@
+// CONTROLS ----
+.options {
+  display: flex;
+  flex-flow: row wrap;
+  width:80%;
+
+  p{
+      width:100%;
+      color:white;
+      
+  }
+  &.status-30{
+    color:yellow;
+
+  }
+  &.status-100{
+    color:gold;
+
+  }
+}
