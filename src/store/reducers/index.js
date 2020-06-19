@@ -8,11 +8,10 @@ import {
   STOP_SIMULATION,
   START_SIMULATION,
 } from "../actions";
-import { faLandmark } from "@fortawesome/free-solid-svg-icons";
-import { act } from "react-dom/test-utils";
+
 
 // GLOBALS
-const __GRID_WIDTH__ = 1280;
+const __GRID_WIDTH__ = 1600;
 const __GRID_HEIGHT__ = 768;
 const ___CELL_SIZE__ = 32;
 const __GRID_ROWS__ = Math.ceil(__GRID_HEIGHT__ / ___CELL_SIZE__);

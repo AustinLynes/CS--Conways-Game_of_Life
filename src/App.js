@@ -8,9 +8,9 @@ import {
   toggleCell,
   handleLife,
 } from "./store/actions";
-import GuidePanel from "./components/guide-panel";
-import OptionsPanel from "./components/options-panel";
+import InformationPanel from "./components/info-panel";
 import Controls from "./components/controls";
+import ReactTooltip from "react-tooltip";
 
 const App = (store) => {
   // EDITOR SETTINGS
@@ -39,7 +39,7 @@ const App = (store) => {
           handleLife(cells, dimensions.cols, dimensions.rows);
           finish_life();
         }
-      }, 0);
+      }, 10);
     }
     return () => clearInterval(simulate);
   }
@@ -76,12 +76,14 @@ const App = (store) => {
                 height={dimensions.grid_size}
                 toggleCell={toggleCell}
                 isAlive={cell.isAlive}
+                is_simulating={is_simulating}
               />
             ))
           )}
         </Layer>
       </Stage>
-      <OptionsPanel />
+      <InformationPanel />
+      <ReactTooltip place="bottom"/>
     </div>
   );
 };

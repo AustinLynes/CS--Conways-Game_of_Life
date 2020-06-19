@@ -22,8 +22,9 @@ const Controls = (props) => {
       <button
         className={`play-btn ${is_simulating ? "active" : " "}`}
         onClick={startSimulation}
-      >
-        <FontAwesomeIcon icon={faPlay} />
+      > 
+      
+        <FontAwesomeIcon data-tip="Start Simulation" icon={faPlay} />
       </button>
       <button className="pause-btn" onClick={stopSimulation}>
         <FontAwesomeIcon icon={faPause} />
