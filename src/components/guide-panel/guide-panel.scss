@@ -1,0 +1,34 @@
+
+// GUIDE ----
+.guide {
+    // display: none;
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.4);
+    height: 100vh;
+    width: 20%;
+    padding: 20px;
+    box-shadow: 8px 8px 10px rgba(0, 0, 0, 0.4);
+    border: 2px solid black;
+    color: white;
+  }
+  .rules {
+    p {
+      padding: 10px;
+    }
+    .highlight {
+      display: block;
+      background: black;
+      padding: 12px;
+      &.plus {
+        color: greenyellow;
+        font-weight: bold;
+      }
+      &.minus {
+        color: red;
+        font-weight: bold;
+      }
+    }
+  }
+  
