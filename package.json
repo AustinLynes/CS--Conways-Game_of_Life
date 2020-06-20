@@ -16,9 +16,11 @@
     "react-konva": "^16.13.0-3",
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
+    "react-three-fiber": "^4.2.10",
     "react-tooltip": "^4.2.7",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "three": "^0.117.1"
   },
   "scripts": {
     "start": "react-scripts start",

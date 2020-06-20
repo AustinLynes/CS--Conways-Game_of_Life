@@ -11,11 +11,11 @@ import {
 
 
 // GLOBALS
-const __GRID_WIDTH__ = 1600;
-const __GRID_HEIGHT__ = 768;
+const __GRID_WIDTH__ = window.innerWidth;
+const __GRID_HEIGHT__ = window.innerHeight;
 const ___CELL_SIZE__ = 32;
-const __GRID_ROWS__ = Math.ceil(__GRID_HEIGHT__ / ___CELL_SIZE__);
-const __GRID_COLS__ = Math.ceil(__GRID_WIDTH__ / ___CELL_SIZE__);
+const __GRID_ROWS__ = Math.floor(__GRID_HEIGHT__ / ___CELL_SIZE__) - 1;
+const __GRID_COLS__ = Math.floor(__GRID_WIDTH__ / ___CELL_SIZE__) - 1;
 
 const init = {
   cells: [],

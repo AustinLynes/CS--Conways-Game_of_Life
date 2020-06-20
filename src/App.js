@@ -29,8 +29,6 @@ const App = (store) => {
   /**
    *  SIMULATION LOOP, WILL END EITHER IF THE STOP BUTTON IS PRESSED OR IF THE GAME STATE REACHES GAME_OVER
    */
-
-  
   const game_loop = ()=>{
     if (is_simulating) {
       var simulate = setInterval(() => {
@@ -61,8 +59,8 @@ const App = (store) => {
 
       <Stage
         className="game-view"
-        width={dimensions.width}
-        height={dimensions.height}
+        width={window.innerWidth}
+        height={window.innerHeight}
       >
         <Layer>
           {cells.map((row, x) =>
