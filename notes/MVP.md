@@ -44,7 +44,7 @@ aspects of computer science and nature.
         because user manually toggled cell before starting simulation or
         simulation is running and rules of life caused cell to change
         state
-* An appropriate data structure to hold a grid of cells that is at least
+* [x] An appropriate data structure to hold a grid of cells that is at least
   25x25. Go as big as you want.
 * Text to display current generation # being displayed
   * [x] Utilize a timeout function to build the next generation of cells &
