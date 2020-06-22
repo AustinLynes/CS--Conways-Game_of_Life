@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Rect } from "react-konva";
-import { CREATE_CELLS_FINISHED } from "../../store/actions";
 
 const Cell = (props) => {
   const {
@@ -59,9 +58,6 @@ const Cell = (props) => {
       shadowColor={color}
       shadowBlur={50}
       zIndex={status ? 99999 : 1}
-      // shadowOffsetX={0}
-      // shadowOffsetY={-20}
-      // shadowOpacity={1}
       shadowEnabled={status}
     />
   );

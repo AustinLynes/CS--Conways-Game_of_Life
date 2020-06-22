@@ -1,0 +1,17 @@
+.game-view {
+    // margin:0 auto;
+    margin: 80px 0;
+    padding:50px;
+    width: 100%;
+    border:2px solid #080808;
+    background-color: #111111;
+    box-shadow: inset 4px 6px 7px rgba(0,0,0,.2);
+
+    :nth-child(1) {
+        border:2px solid #080808;
+        box-shadow: 4px 6px 7px rgba(0,0,0,.2);
+        margin: 0 auto;
+    }
+    
+  }
+  

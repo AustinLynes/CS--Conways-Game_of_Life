@@ -1,8 +1,10 @@
 import React from "react";
 
-const GuidePanel = () => {
+const GuidePanel = (props) => {
+  const { guide_open } = props;
+
   return (
-    <div className="guide">
+    <div className={`guide ${guide_open ? "" : "close"}`}>
       <div className="rules">
         <h3>Rules</h3>
         <span className="highlight minus">Death</span>
@@ -25,7 +27,8 @@ const GuidePanel = () => {
           lives on to the next generation
         </p>
       </div>
+      <div className="blur"></div>
     </div>
   );
 };
-export default GuidePanel
+export default GuidePanel;

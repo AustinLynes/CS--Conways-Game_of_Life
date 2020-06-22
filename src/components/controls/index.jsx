@@ -6,9 +6,10 @@ import {
   createCells,
   startSimulation,
   stopSimulation,
-} from "../../store/actions";
+} from "../../store/actions/grid";
 
 const Controls = (props) => {
+
   const {
     dimensions,
     startSimulation,
@@ -43,8 +44,8 @@ const Controls = (props) => {
 };
 const __props = (store) => {
   return {
-    dimensions: store.dimensions,
-    is_simulating: store.is_simulating,
+    dimensions: store.grid.dimensions,
+    is_simulating: store.grid.is_simulating,
   };
 };
 const __actions_list = {

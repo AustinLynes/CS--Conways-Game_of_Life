@@ -66,6 +66,7 @@ Write an algorithm that:
 * Breaks down above steps into appropriate sub-tasks implemented with
   helper functions to improve readability
 * Uses double buffering to update grid with next generation.
+
 * Does something well-documented with the edge of the grid. (e.g. wrap
   around to the far side--most fun!--or assumes all edge cells are
   permanently dead.)
@@ -74,17 +75,17 @@ Write an algorithm that:
 * [] TEST EVERYTHING.. MAYBE CYPRESS?? LAST RESORT JEST
 * [] ADD CODE QUALITY
 
-* [] Allow users to specify the speed of the simulation <------- 
+* [X] Allow users to specify the speed of the simulation <------- 
 
 * [] Provide functionality to manually step through the simulation one
        generation at a time, as opposed to animating automatically  <-------------
 
-* [] Allow users to change the dimension of the grid being displayed <----------
+* [X] Allow users to change the dimension of the grid being displayed <----------
 
 * [] Create a few sample cell configurations that users can load and run  <------
 
 
-* Add an option that creates a random cell configuration that users can
+* [X] Add an option that creates a random cell configuration that users can
   run  <-------------------- 
 
 

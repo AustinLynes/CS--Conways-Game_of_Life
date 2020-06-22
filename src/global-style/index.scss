@@ -1,5 +1,7 @@
 @import "./reset.scss";
+@import "../components/canvas/canvas.scss";
 @import "../components/controls/controls.scss";
+@import "../components/options-panel/options-panel.scss";
 @import "../components/info-panel/information-panel.scss";
 @import "../components//guide-panel/guide-panel.scss";
 
@@ -8,11 +10,24 @@
   flex-flow: row wrap;
 }
 
-.game-view {
-  // padding: px 10px;
-  // width: 100%;
-  :nth-child(1) {
-    margin: 30px 15px;
+.rules-btn{
+  font-weight: bolder;
+  position: absolute;
+  bottom:10px;
+  right:50%;
+  background: #161616;
+  color: rgb(109, 109, 109);
+  border: none;
+  padding:10px;
+  background:#222;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+
+  transition: all 0.5s ease-in-out;
+  z-index: 200;
+  // top: 120px;
+  &:hover {
+    color: white;
   }
-  
 }
