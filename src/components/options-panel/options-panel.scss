@@ -1,38 +1,40 @@
 // CONTROLS ----
-.info-panel {
+.options-panel {
   &*{
     user-select: none;
   }
+  z-index: 15;
   position: absolute;
   height: 87vh;
   width: 20%;
   transition: width 0.3s ease;
   background: #222;
   top:80px;
-
-  .info-btn {
+  right:0px;
+  color:white;
+  
+  .options-btn {
     z-index: 10;
+
     position: absolute;
-    background: #222;
-    text-align: start;
+    background: rgba($color: #000000, $alpha: .3);
     color: rgb(109, 109, 109);
     border: none;
-    padding: 1rem;
-    top:-70px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    width:200px;
+    padding: 1rem 1rem 1rem 7px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     font-size: x-large;
     background:#222;
     transition: all 0.3s ease;
-
+    width:200px;
+    top: -70px;
+    right: 0;
     &:hover {
       color: white;
     }
   }
 
   .info {
-    margin-top: 80px;
     box-sizing: border-box;
     display: flex;
     flex-flow: column wrap;
@@ -55,12 +57,25 @@
       color: #888888;
     }
   }
+  .options{
+    margin-top: 80px;
+    padding:1rem;
+    input{
+      box-sizing: border-box;
+      background:transparent;
+      border:none;
+      color:white;
+      font-size: large;
+      width:100%;
+    }
+  }
   &.closed {
     width: 0;
+    padding: 0;
     span {
       width: 0;
       opacity: 0;
     }
- 
+  
   }
 }

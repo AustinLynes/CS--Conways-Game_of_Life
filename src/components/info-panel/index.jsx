@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { faAngleLeft, faAngleRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 const InformationPanel = (props) => {
   const { cols, rows, population, generation } = props;
   const [isOpen, setIsOpen] = useState(false);
@@ -16,33 +16,18 @@ const InformationPanel = (props) => {
         </span>
 
         <span className="label">Generation:</span>
-        <span className="number"> {generation}</span>
+        <span className="number">{generation}</span>
         <span className="label">Population: </span>
-        <span className="number"> {population}</span>
-
-        <button
-          className="info-btn"
-          onClick={() => {
-            setIsOpen(!isOpen);
-          }}
-        >
-          {isOpen ? (
-            <>
-              <FontAwesomeIcon
-                data-tip="close current stats"
-                icon={faAngleLeft}
-              />
-            </>
-          ) : (
-            <>
-              <FontAwesomeIcon
-                data-tip="open current stats"
-                icon={faAngleRight}
-              />
-            </>
-          )}
-        </button>
+        <span className="number">{population}</span>
       </div>
+      <button
+        className="info-btn"
+        onClick={() => {
+          setIsOpen(!isOpen);
+        }}
+      >
+        {isOpen ? <FontAwesomeIcon icon={faTimes}/> : <>Status</>}
+      </button>
     </div>
   );
 };
@@ -50,10 +35,10 @@ const InformationPanel = (props) => {
 //REDUX  ------------------------
 const __props = (store) => {
   return {
-    population: store.population,
-    generation: store.generation,
-    cols: store.dimensions.cols,
-    rows: store.dimensions.rows,
+    population: store.grid.population,
+    generation: store.grid.generation,
+    cols: store.grid.dimensions.cols,
+    rows: store.grid.dimensions.rows,
   };
 };
 const __actions_list = {};

@@ -1,14 +1,22 @@
-export const SAVE = "SAVE";
 export const CREATE_CELLS_START = "CREATE_CELLS_START";
 export const CREATE_CELLS_FINISHED = "CREATE_CELLS_FINISHED";
+
+export const CREATE_RANDOM_GENERATION = "CREATE_RANDOM_GENERATION";
+export const CREATE_RANDOM_GENERATION_END = "CREATE_RANDOM_GENERATION_END";
+
 export const TOGGLE_CELL = "TOGGLE_CELL";
 export const TOGGLE_CELL_END = "TOGGLE_CELL_END";
+
 export const CREATE_NEXT_GENERATION_START = "CREATE_NEXT_GENERATION_START";
 export const CREATE_NEXT_GENERATION_END = "CREATE_NEXT_GENERATION_END";
 
 export const STOP_SIMULATION = "STOP_SIMULATION";
 export const START_SIMULATION = "START_SIMULATION";
 export const PAUSE_SIMULATION = "PAUSE_SIMULATION";
+
+export const UPDATE_SIMULATION_SPEED = "UPDATE_SIMULATION_SPEED";
+export const UPDATE_GRID_SIZE = "UPDATE_GRID_SIZE";
+
 /**
  * @description
  * creates a 2D Grid of Cells
@@ -21,13 +29,34 @@ export const createCells = () => (dispatch) => {
   dispatch({ type: CREATE_CELLS_START });
   return { type: CREATE_CELLS_FINISHED };
 };
-/**
- * @description
- *  Will Toggle The Given Cells Status To Alive Or Dead
- * @param {array} cells
- * @param {str} id
- * @param {fn()} cb
- */
+
+export const randomGeneration = (cols, rows)  => {
+  var _cells = [];
+  for (let x = 0; x < cols; x++) {
+    _cells.push([]);
+    for (let y = 0; y < rows; y++)
+      _cells[x].push({
+        id: `${x}-${y}`,
+        x: x,
+        y: y,
+        isAlive: Math.floor(Math.random() * 10) < 7 ? false : true, // flip a coin. 0 dead, 1 alive
+      });
+  }
+
+  var count = 0;
+  for (let x = 0; x < cols; x++) {
+    for (let y = 0; y < rows; y++) {
+      if (_cells[x][y].isAlive) {
+        count += 1;
+      }
+    }
+  }
+
+  console.log(_cells);
+
+  return { type: CREATE_RANDOM_GENERATION_END, payload: {cells: _cells, population: count} };
+};
+
 export const toggleCell = (id) => {
   return { type: TOGGLE_CELL, payload: id };
 };
@@ -69,8 +98,12 @@ const countNeighbors = (cur_x, cur_y, prev_generation, cols, rows) => {
 };
 /**
  * @title The Game of Life algorithm
- * @description ---tbd
- *
+ * @description 
+ *  will create a seccond buffer, and apply the rules of life to it before
+ *  setting the original state to the next state 
+ *  will also count all that are alive in the new array
+ * 
+ *   payload { next_generation , population }
  * */
 
 export const handleLife = (prev_generation, cols, rows) => {
@@ -80,11 +113,14 @@ export const handleLife = (prev_generation, cols, rows) => {
     for (let y = 0; y < rows; y++) {
       const neighbors = countNeighbors(x, y, prev_generation, cols, rows);
       const prev_state = prev_generation[x][y].isAlive;
+      // RULE 1
       if (prev_state === false && neighbors === 3) {
         next_generation[x][y].isAlive = true;
-      } else if (prev_state === true && (neighbors < 2 || neighbors > 3)) {
+      }
+      // RULE 2
+      else if (prev_state === true && (neighbors < 2 || neighbors > 3)) {
         next_generation[x][y].isAlive = false;
-      } 
+      }
       // RULE 3
       else {
         next_generation[x][y].isAlive = prev_state;
@@ -105,38 +141,11 @@ export const handleLife = (prev_generation, cols, rows) => {
   };
 };
 export const finish_life = () => {
-  return {type: CREATE_NEXT_GENERATION_END };
+  return { type: CREATE_NEXT_GENERATION_END };
 };
-// const { cols, rows } = options
-
-// var next_generation = createCells(cols, rows)
-// DISPATCH ----- create generation.  ----- seccond buffer.
-// cells.map(row =>
-//     row.map(_cell => {
-//         // DISPATCH
-
-//         // DISPATCH ----- apply rules ----
-//         // const { isAlive, x, y } = _cell.props
-//         // var neighbors = countNeighbors(cells, x, y, cols, rows)
-
-//         // RULE 1
-//         // if (isAlive && neighbors === 3) {
-//         //     console.log("RULE 1 DEATH MET!")
-//         //     next_generation[x][y].props.setAlive(false)
-//         // }
-//         // // RULE 2
-//         // else if (!isAlive && (neighbors > 2 || neighbors < 3)) {
-//         //     console.log("RULE 2 BIRTH MET!")
-//         //     next_generation[x][y].props.setAlive(true)
-
-//         // }
-//        
-//         // else {
-//         //     console.log("RULE 3 STASIS")
-//         //     next_generation[x][y].props.setAlive(isAlive)
-
-//         // }
-
-//     }))
-// DISPATCH ---- update generation ---- swap buffer
-// updateCells(next_generation)
+export const updateGridSize = (val) => {
+  return { type: UPDATE_GRID_SIZE, payload: val };
+};
+export const updateSimSpeed = (val) => {
+  return { type: UPDATE_SIMULATION_SPEED, payload: val };
+};
