@@ -1,16 +1,4 @@
-import {
-  CREATE_CELLS_START,
-  TOGGLE_CELL,
-  TOGGLE_CELL_END,
-  CREATE_NEXT_GENERATION_START,
-  CREATE_NEXT_GENERATION_END,
-  STOP_SIMULATION,
-  START_SIMULATION,
-  UPDATE_SIMULATION_SPEED,
-  CREATE_RANDOM_GENERATION_END,
-  UPDATE_GRID_SIZE,
-  CREATE_RANDOM_GENERATION,
-} from "../../actions/grid";
+import * as types from "../../actions/grid/types";
 
 // GLOBALS
 const __GRID_WIDTH__ = 1200;
@@ -26,7 +14,7 @@ const init = {
   is_simulating: false,
   generation: 0,
   population: 0,
-  simulation_speed: .1,
+  simulation_speed: 0.1,
   dimensions: {
     width: __GRID_WIDTH__,
     height: __GRID_HEIGHT__,
@@ -38,7 +26,7 @@ const init = {
 
 export function gridReducer(state = init, action) {
   switch (action.type) {
-    case CREATE_CELLS_START:
+    case types.CREATE_CELLS_START:
       var _cells = [];
       for (let x = 0; x < state.dimensions.cols; x++) {
         _cells.push([]);
@@ -54,7 +42,7 @@ export function gridReducer(state = init, action) {
 
     // EDITOR ---
 
-    case TOGGLE_CELL:
+    case types.TOGGLE_CELL:
       var count = 0;
       const updateCells = () => {
         const l_cells = state.cells;
@@ -78,17 +66,17 @@ export function gridReducer(state = init, action) {
         is_toggling: true,
         population: (state.population += count),
       };
-    case TOGGLE_CELL_END:
+    case types.TOGGLE_CELL_END:
       return {
         ...state,
         is_toggling: false,
       };
-    case START_SIMULATION:
+    case types.START_SIMULATION:
       return {
         ...state,
         is_simulating: true,
       };
-    case STOP_SIMULATION:
+    case types.STOP_SIMULATION:
       return {
         ...state,
         is_simulating: false,
@@ -96,12 +84,12 @@ export function gridReducer(state = init, action) {
         population: 0,
         generation: 0,
       };
-    case UPDATE_SIMULATION_SPEED:
+    case types.UPDATE_SIMULATION_SPEED:
       return {
         ...state,
         simulation_speed: action.payload,
       };
-    case UPDATE_GRID_SIZE:
+    case types.UPDATE_GRID_SIZE:
       return {
         ...state,
         dimensions: {
@@ -111,20 +99,20 @@ export function gridReducer(state = init, action) {
           rows: Math.floor(state.dimensions.height / action.payload),
         },
       };
-    case CREATE_RANDOM_GENERATION:
+    case types.CREATE_RANDOM_GENERATION:
       return {
         ...state,
         // cells: action.payload,
-        is_generating:true
+        is_generating: true,
       };
-      case CREATE_RANDOM_GENERATION_END:
-        return {
-          ...state,
-          cells: action.payload.cells,
-          population: action.payload.population,
-          is_generating:false
-        };
-    case CREATE_NEXT_GENERATION_START:
+    case types.CREATE_RANDOM_GENERATION_END:
+      return {
+        ...state,
+        cells: action.payload.cells,
+        population: action.payload.population,
+        is_generating: false,
+      };
+    case types.CREATE_NEXT_GENERATION_START:
       return {
         ...state,
         cells: action.payload.next_generation,
@@ -132,7 +120,7 @@ export function gridReducer(state = init, action) {
         generation: state.generation + 1,
         population: action.payload.population_count,
       };
-    case CREATE_NEXT_GENERATION_END:
+    case types.CREATE_NEXT_GENERATION_END:
       return {
         ...state,
         is_generating: false,
