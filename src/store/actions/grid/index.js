@@ -9,7 +9,8 @@ import * as types from "./types";
  * [row[col, col, col], row[col, col col], row[col, col, col]]
  */
 export const createCells = () => (dispatch) => {
-  dispatch({ type: types.CREATE_CELLS_START });
+  
+  dispatch({ type: types.CREATE_CELLS });
   return { type: types.CREATE_CELLS_FINISHED };
 };
 

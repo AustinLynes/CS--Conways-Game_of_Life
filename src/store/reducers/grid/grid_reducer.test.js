@@ -1,6 +1,6 @@
 import { gridReducer } from "./";
 import * as types from "../../actions/grid/types";
-import { handleLife as mockLife } from "../../actions/grid";
+import { handleLife as mockLife, createCells } from "../../actions/grid";
 const mock_init_state = {
   cells: [],
   dimensions: {
@@ -27,9 +27,15 @@ describe("grid reducer", () => {
 
   // CREATE ----
   it("can handle CREATE_CELLS", () => {
+    const cells = createCells(
+      mock_init_state.dimensions.cols,
+      mock_init_state.dimensions.rows
+    ).cells;
+
     expect(
       gridReducer(mock_init_state, {
-        type: types.CREATE_CELLS_START,
+        type: types.CREATE_CELLS,
+        payload: cells,
       }).cells
     ).toEqual([
       [
@@ -765,205 +771,6 @@ describe("grid reducer", () => {
       ],
     ]);
   });
-  
-  it("can handle HANDLE_LIFE --  Cells SMALL SQUARE", () => {
-    // TRY WITH ZERO CELLS ALIVE
-    const state_with_cells = {
-      cells: [
-        [
-          {
-            id: "0-0",
-            isAlive: false,
-            x: 0,
-            y: 0,
-          },
-          {
-            id: "0-1",
-            isAlive: false,
-            x: 0,
-            y: 1,
-          },
-          {
-            id: "0-2",
-            isAlive: false,
-            x: 0,
-            y: 2,
-          },
-          {
-            id: "0-3",
-            isAlive: false,
-            x: 0,
-            y: 3,
-          },
-        ],
-        [
-          {
-            id: "1-0",
-            isAlive: false,
-            x: 1,
-            y: 0,
-          },
-          {
-            id: "1-1",
-            isAlive: true,
-            x: 1,
-            y: 1,
-          },
-          {
-            id: "1-2",
-            isAlive: true,
-            x: 1,
-            y: 2,
-          },
-          {
-            id: "1-3",
-            isAlive: false,
-            x: 1,
-            y: 3,
-          },
-        ],
-        [
-          {
-            id: "2-0",
-            isAlive: false,
-            x: 2,
-            y: 0,
-          },
-          {
-            id: "2-1",
-            isAlive: true,
-            x: 2,
-            y: 1,
-          },
-          {
-            id: "2-2",
-            isAlive: true,
-            x: 2,
-            y: 2,
-          },
-          {
-            id: "2-3",
-            isAlive: false,
-            x: 2,
-            y: 3,
-          },
-        ],
-        [
-          {
-            id: "3-0",
-            isAlive: false,
-            x: 3,
-            y: 0,
-          },
-          {
-            id: "3-1",
-            isAlive: false,
-            x: 3,
-            y: 1,
-          },
-          {
-            id: "3-2",
-            isAlive: false,
-            x: 3,
-            y: 2,
-          },
-          {
-            id: "3-3",
-            isAlive: false,
-            x: 3,
-            y: 3,
-          },
-        ],
-      ],
-      dimensions: {
-        width: 1200,
-        height: 768,
-        cols: 4,
-        rows: 4,
-        grid_size: 32,
-      },
-      simulation_speed: 0.1,
-      generation: 0,
-      population: 0,
-      is_simulating: false,
-      is_toggling: false,
-      is_generating: false,
-    };
-    // Since the Square is stable it shouldn't change
-    const next_gen = mockLife(
-        state_with_cells.cells,
-        state_with_cells.dimensions.cols,
-        state_with_cells.dimensions.rows
-      ).payload.next_generation;
-    expect(
-      gridReducer(state_with_cells, {
-        type: types.CREATE_NEXT_GENERATION_START,
-        payload: { population: 0, next_generation: next_gen },
-      }).cells
-    ).toEqual([
-      [
-        { id: "0-0", isAlive: false, x: 0, y: 0 },
-        { id: "0-1", isAlive: false, x: 0, y: 1 },
-        { id: "0-2", isAlive: false, x: 0, y: 2 },
-        { id: "0-3", isAlive: false, x: 0, y: 3 },
-      ],
-      [
-        { id: "1-0", isAlive: false, x: 1, y: 0 },
-        { id: "1-1", isAlive: true, x: 1, y: 1 },
-        { id: "1-2", isAlive: true, x: 1, y: 2 },
-        { id: "1-3", isAlive: false, x: 1, y: 3 },
-      ],
-      [
-        { id: "2-0", isAlive: false, x: 2, y: 0 },
-        { id: "2-1", isAlive: true, x: 2, y: 1 },
-        { id: "2-2", isAlive: true, x: 2, y: 2 },
-        { id: "2-3", isAlive: false, x: 2, y: 3 },
-      ],
-      [
-        { id: "3-0", isAlive: false, x: 3, y: 0 },
-        { id: "3-1", isAlive: false, x: 3, y: 1 },
-        { id: "3-2", isAlive: false, x: 3, y: 2 },
-        { id: "3-3", isAlive: false, x: 3, y: 3 },
-      ],
-    ]);
-    // asert that this is true by trying again..
-    const next_gen_2 =  mockLife(
-        state_with_cells.cells,
-        state_with_cells.dimensions.cols,
-        state_with_cells.dimensions.rows
-      ).payload.next_generation;
-    expect(
-      gridReducer(state_with_cells, {
-        type: types.CREATE_NEXT_GENERATION_START,
-        payload: { population: 0, next_generation: next_gen_2 },
-      }).cells
-    ).toEqual([
-      [
-        { id: "0-0", isAlive: false, x: 0, y: 0 },
-        { id: "0-1", isAlive: false, x: 0, y: 1 },
-        { id: "0-2", isAlive: false, x: 0, y: 2 },
-        { id: "0-3", isAlive: false, x: 0, y: 3 },
-      ],
-      [
-        { id: "1-0", isAlive: false, x: 1, y: 0 },
-        { id: "1-1", isAlive: true, x: 1, y: 1 },
-        { id: "1-2", isAlive: true, x: 1, y: 2 },
-        { id: "1-3", isAlive: false, x: 1, y: 3 },
-      ],
-      [
-        { id: "2-0", isAlive: false, x: 2, y: 0 },
-        { id: "2-1", isAlive: true, x: 2, y: 1 },
-        { id: "2-2", isAlive: true, x: 2, y: 2 },
-        { id: "2-3", isAlive: false, x: 2, y: 3 },
-      ],
-      [
-        { id: "3-0", isAlive: false, x: 3, y: 0 },
-        { id: "3-1", isAlive: false, x: 3, y: 1 },
-        { id: "3-2", isAlive: false, x: 3, y: 2 },
-        { id: "3-3", isAlive: false, x: 3, y: 3 },
-      ],
-    ]);
-  });
 
   it("can handle HANDLE_LIFE --  Cells A LONELY CELL SHOULD DIE", () => {
     // TRY WITH ZERO CELLS ALIVE
@@ -1090,10 +897,10 @@ describe("grid reducer", () => {
     };
     // Since the Cell is surrounded by 0 CELLS it should DIE
     const next_gen = mockLife(
-        state_with_cells.cells,
-        state_with_cells.dimensions.cols,
-        state_with_cells.dimensions.rows
-      ).payload.next_generation;
+      state_with_cells.cells,
+      state_with_cells.dimensions.cols,
+      state_with_cells.dimensions.rows
+    ).payload.next_generation;
 
     expect(
       gridReducer(state_with_cells, {
@@ -1126,6 +933,408 @@ describe("grid reducer", () => {
         { id: "3-3", isAlive: false, x: 3, y: 3 },
       ],
     ]);
-   
+  });
+
+  it("can handle HANDLE_LIFE --  Cells SMALL SQUARE", () => {
+    // TRY WITH ZERO CELLS ALIVE
+    const state_with_cells = {
+      cells: [
+        [
+          {
+            id: "0-0",
+            isAlive: false,
+            x: 0,
+            y: 0,
+          },
+          {
+            id: "0-1",
+            isAlive: false,
+            x: 0,
+            y: 1,
+          },
+          {
+            id: "0-2",
+            isAlive: false,
+            x: 0,
+            y: 2,
+          },
+          {
+            id: "0-3",
+            isAlive: false,
+            x: 0,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "1-0",
+            isAlive: false,
+            x: 1,
+            y: 0,
+          },
+          {
+            id: "1-1",
+            isAlive: true,
+            x: 1,
+            y: 1,
+          },
+          {
+            id: "1-2",
+            isAlive: true,
+            x: 1,
+            y: 2,
+          },
+          {
+            id: "1-3",
+            isAlive: false,
+            x: 1,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "2-0",
+            isAlive: false,
+            x: 2,
+            y: 0,
+          },
+          {
+            id: "2-1",
+            isAlive: true,
+            x: 2,
+            y: 1,
+          },
+          {
+            id: "2-2",
+            isAlive: true,
+            x: 2,
+            y: 2,
+          },
+          {
+            id: "2-3",
+            isAlive: false,
+            x: 2,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "3-0",
+            isAlive: false,
+            x: 3,
+            y: 0,
+          },
+          {
+            id: "3-1",
+            isAlive: false,
+            x: 3,
+            y: 1,
+          },
+          {
+            id: "3-2",
+            isAlive: false,
+            x: 3,
+            y: 2,
+          },
+          {
+            id: "3-3",
+            isAlive: false,
+            x: 3,
+            y: 3,
+          },
+        ],
+      ],
+      dimensions: {
+        width: 1200,
+        height: 768,
+        cols: 4,
+        rows: 4,
+        grid_size: 32,
+      },
+      simulation_speed: 0.1,
+      generation: 0,
+      population: 0,
+      is_simulating: false,
+      is_toggling: false,
+      is_generating: false,
+    };
+    // Since the Square is stable it shouldn't change
+    const next_gen = mockLife(
+      state_with_cells.cells,
+      state_with_cells.dimensions.cols,
+      state_with_cells.dimensions.rows
+    ).payload.next_generation;
+    expect(
+      gridReducer(state_with_cells, {
+        type: types.CREATE_NEXT_GENERATION_START,
+        payload: { population: 0, next_generation: next_gen },
+      }).cells
+    ).toEqual([
+      [
+        { id: "0-0", isAlive: false, x: 0, y: 0 },
+        { id: "0-1", isAlive: false, x: 0, y: 1 },
+        { id: "0-2", isAlive: false, x: 0, y: 2 },
+        { id: "0-3", isAlive: false, x: 0, y: 3 },
+      ],
+      [
+        { id: "1-0", isAlive: false, x: 1, y: 0 },
+        { id: "1-1", isAlive: true, x: 1, y: 1 },
+        { id: "1-2", isAlive: true, x: 1, y: 2 },
+        { id: "1-3", isAlive: false, x: 1, y: 3 },
+      ],
+      [
+        { id: "2-0", isAlive: false, x: 2, y: 0 },
+        { id: "2-1", isAlive: true, x: 2, y: 1 },
+        { id: "2-2", isAlive: true, x: 2, y: 2 },
+        { id: "2-3", isAlive: false, x: 2, y: 3 },
+      ],
+      [
+        { id: "3-0", isAlive: false, x: 3, y: 0 },
+        { id: "3-1", isAlive: false, x: 3, y: 1 },
+        { id: "3-2", isAlive: false, x: 3, y: 2 },
+        { id: "3-3", isAlive: false, x: 3, y: 3 },
+      ],
+    ]);
+    // asert that this is true by trying again..
+    const next_gen_2 = mockLife(
+      state_with_cells.cells,
+      state_with_cells.dimensions.cols,
+      state_with_cells.dimensions.rows
+    ).payload.next_generation;
+    expect(
+      gridReducer(state_with_cells, {
+        type: types.CREATE_NEXT_GENERATION_START,
+        payload: { population: 0, next_generation: next_gen_2 },
+      }).cells
+    ).toEqual([
+      [
+        { id: "0-0", isAlive: false, x: 0, y: 0 },
+        { id: "0-1", isAlive: false, x: 0, y: 1 },
+        { id: "0-2", isAlive: false, x: 0, y: 2 },
+        { id: "0-3", isAlive: false, x: 0, y: 3 },
+      ],
+      [
+        { id: "1-0", isAlive: false, x: 1, y: 0 },
+        { id: "1-1", isAlive: true, x: 1, y: 1 },
+        { id: "1-2", isAlive: true, x: 1, y: 2 },
+        { id: "1-3", isAlive: false, x: 1, y: 3 },
+      ],
+      [
+        { id: "2-0", isAlive: false, x: 2, y: 0 },
+        { id: "2-1", isAlive: true, x: 2, y: 1 },
+        { id: "2-2", isAlive: true, x: 2, y: 2 },
+        { id: "2-3", isAlive: false, x: 2, y: 3 },
+      ],
+      [
+        { id: "3-0", isAlive: false, x: 3, y: 0 },
+        { id: "3-1", isAlive: false, x: 3, y: 1 },
+        { id: "3-2", isAlive: false, x: 3, y: 2 },
+        { id: "3-3", isAlive: false, x: 3, y: 3 },
+      ],
+    ]);
+  });
+
+  it("can handle HANDLE_LIFE --  Cells SPINNER", () => {
+    // 0,0,1,0        0,0,0,0      0,0,1,0
+    // 0,0,1,0   to   0,1,1,1  to  0,0,1,0
+    // 0,0,1,0        0,0,0,0      0,0,1,0
+    // 0,0,0,0        0,0,0,0      0,0,0,0
+
+    const state_with_cells = {
+      cells: [
+        [
+          {
+            id: "0-0",
+            isAlive: false,
+            x: 0,
+            y: 0,
+          },
+          {
+            id: "0-1",
+            isAlive: false,
+            x: 0,
+            y: 1,
+          },
+          {
+            id: "0-2",
+            isAlive: true,
+            x: 0,
+            y: 2,
+          },
+          {
+            id: "0-3",
+            isAlive: false,
+            x: 0,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "1-0",
+            isAlive: false,
+            x: 1,
+            y: 0,
+          },
+          {
+            id: "1-1",
+            isAlive: false,
+            x: 1,
+            y: 1,
+          },
+          {
+            id: "1-2",
+            isAlive: true,
+            x: 1,
+            y: 2,
+          },
+          {
+            id: "1-3",
+            isAlive: false,
+            x: 1,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "2-0",
+            isAlive: false,
+            x: 2,
+            y: 0,
+          },
+          {
+            id: "2-1",
+            isAlive: false,
+            x: 2,
+            y: 1,
+          },
+          {
+            id: "2-2",
+            isAlive: true,
+            x: 2,
+            y: 2,
+          },
+          {
+            id: "2-3",
+            isAlive: false,
+            x: 2,
+            y: 3,
+          },
+        ],
+        [
+          {
+            id: "3-0",
+            isAlive: false,
+            x: 3,
+            y: 0,
+          },
+          {
+            id: "3-1",
+            isAlive: false,
+            x: 3,
+            y: 1,
+          },
+          {
+            id: "3-2",
+            isAlive: false,
+            x: 3,
+            y: 2,
+          },
+          {
+            id: "3-3",
+            isAlive: false,
+            x: 3,
+            y: 3,
+          },
+        ],
+      ],
+      dimensions: {
+        width: 1200,
+        height: 768,
+        cols: 4,
+        rows: 4,
+        grid_size: 32,
+      },
+      simulation_speed: 0.1,
+      generation: 0,
+      population: 0,
+      is_simulating: false,
+      is_toggling: false,
+      is_generating: false,
+    };
+    // Since the Square is stable it shouldn't change
+    const next_gen = mockLife(
+      state_with_cells.cells,
+      state_with_cells.dimensions.cols,
+      state_with_cells.dimensions.rows
+    ).payload.next_generation;
+
+    expect(
+      gridReducer(state_with_cells, {
+        type: types.CREATE_NEXT_GENERATION_START,
+        payload: { population: 0, next_generation: next_gen },
+      }).cells
+    ).toEqual([
+      [
+        { id: "0-0", isAlive: false, x: 0, y: 0 },
+        { id: "0-1", isAlive: false, x: 0, y: 1 },
+        { id: "0-2", isAlive: false, x: 0, y: 2 },
+        { id: "0-3", isAlive: false, x: 0, y: 3 },
+      ],
+      [
+        { id: "1-0", isAlive: false, x: 1, y: 0 },
+        { id: "1-1", isAlive: true, x: 1, y: 1 },
+        { id: "1-2", isAlive: true, x: 1, y: 2 },
+        { id: "1-3", isAlive: true, x: 1, y: 3 },
+      ],
+      [
+        { id: "2-0", isAlive: false, x: 2, y: 0 },
+        { id: "2-1", isAlive: false, x: 2, y: 1 },
+        { id: "2-2", isAlive: false, x: 2, y: 2 },
+        { id: "2-3", isAlive: false, x: 2, y: 3 },
+      ],
+      [
+        { id: "3-0", isAlive: false, x: 3, y: 0 },
+        { id: "3-1", isAlive: false, x: 3, y: 1 },
+        { id: "3-2", isAlive: false, x: 3, y: 2 },
+        { id: "3-3", isAlive: false, x: 3, y: 3 },
+      ],
+    ]);
+    // asert that this is true by trying again..
+    const next_gen_2 = mockLife(
+      next_gen,
+      state_with_cells.dimensions.cols,
+      state_with_cells.dimensions.rows
+    ).payload.next_generation;
+    expect(
+      gridReducer(state_with_cells, {
+        type: types.CREATE_NEXT_GENERATION_START,
+        payload: { population: 0, next_generation: next_gen_2 },
+      }).cells
+    ).toEqual([
+      [
+        { id: "0-0", isAlive: false, x: 0, y: 0 },
+        { id: "0-1", isAlive: false, x: 0, y: 1 },
+        { id: "0-2", isAlive: true, x: 0, y: 2 },
+        { id: "0-3", isAlive: false, x: 0, y: 3 },
+      ],
+      [
+        { id: "1-0", isAlive: false, x: 1, y: 0 },
+        { id: "1-1", isAlive: false, x: 1, y: 1 },
+        { id: "1-2", isAlive: true, x: 1, y: 2 },
+        { id: "1-3", isAlive: false, x: 1, y: 3 },
+      ],
+      [
+        { id: "2-0", isAlive: false, x: 2, y: 0 },
+        { id: "2-1", isAlive: false, x: 2, y: 1 },
+        { id: "2-2", isAlive: true, x: 2, y: 2 },
+        { id: "2-3", isAlive: false, x: 2, y: 3 },
+      ],
+      [
+        { id: "3-0", isAlive: false, x: 3, y: 0 },
+        { id: "3-1", isAlive: false, x: 3, y: 1 },
+        { id: "3-2", isAlive: false, x: 3, y: 2 },
+        { id: "3-3", isAlive: false, x: 3, y: 3 },
+      ],
+    ]);
   });
 });

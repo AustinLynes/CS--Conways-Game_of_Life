@@ -26,7 +26,7 @@ const init = {
 
 export function gridReducer(state = init, action) {
   switch (action.type) {
-    case types.CREATE_CELLS_START:
+    case types.CREATE_CELLS:
       var _cells = [];
       for (let x = 0; x < state.dimensions.cols; x++) {
         _cells.push([]);
@@ -39,9 +39,6 @@ export function gridReducer(state = init, action) {
         cells: _cells,
         is_generating: false,
       };
-
-    // EDITOR ---
-
     case types.TOGGLE_CELL:
       var count = 0;
       const updateCells = () => {
