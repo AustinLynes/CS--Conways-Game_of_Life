@@ -1,6 +1,6 @@
 import {TOGGLE_GUIDE_PANEL}from '../../actions/application'
 
-const init = {
+export const init = {
     guide_open: false,
 
 }

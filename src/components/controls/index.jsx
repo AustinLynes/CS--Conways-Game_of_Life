@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay, faPause, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlay, faPause, faTrash, faStop } from "@fortawesome/free-solid-svg-icons";
 import {
   createCells,
   startSimulation,
   stopSimulation,
+  pauseSimulation,
 } from "../../store/actions/grid";
 
 const Controls = (props) => {
@@ -16,6 +17,7 @@ const Controls = (props) => {
     is_simulating,
     stopSimulation,
     createCells,
+    pauseSimulation
   } = props;
 
   return (
@@ -28,8 +30,12 @@ const Controls = (props) => {
         <FontAwesomeIcon data-tip="Start Simulation" icon={faPlay} />
       </button>
       <button className="pause-btn" onClick={stopSimulation}>
-        <FontAwesomeIcon icon={faPause} />
+        <FontAwesomeIcon icon={faPause} />    
       </button>
+      <button className="pause-btn" onClick={pauseSimulation}>
+        <FontAwesomeIcon icon={faStop} />
+      </button>
+
       <button
         className="trash-btn"
         onClick={() => {
@@ -52,6 +58,7 @@ const __actions_list = {
   createCells,
   startSimulation,
   stopSimulation,
+  pauseSimulation
 };
 
 //REDUX  ------------------------

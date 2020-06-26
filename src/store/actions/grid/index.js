@@ -1,21 +1,4 @@
-export const CREATE_CELLS_START = "CREATE_CELLS_START";
-export const CREATE_CELLS_FINISHED = "CREATE_CELLS_FINISHED";
-
-export const CREATE_RANDOM_GENERATION = "CREATE_RANDOM_GENERATION";
-export const CREATE_RANDOM_GENERATION_END = "CREATE_RANDOM_GENERATION_END";
-
-export const TOGGLE_CELL = "TOGGLE_CELL";
-export const TOGGLE_CELL_END = "TOGGLE_CELL_END";
-
-export const CREATE_NEXT_GENERATION_START = "CREATE_NEXT_GENERATION_START";
-export const CREATE_NEXT_GENERATION_END = "CREATE_NEXT_GENERATION_END";
-
-export const STOP_SIMULATION = "STOP_SIMULATION";
-export const START_SIMULATION = "START_SIMULATION";
-export const PAUSE_SIMULATION = "PAUSE_SIMULATION";
-
-export const UPDATE_SIMULATION_SPEED = "UPDATE_SIMULATION_SPEED";
-export const UPDATE_GRID_SIZE = "UPDATE_GRID_SIZE";
+import * as types from "./types";
 
 /**
  * @description
@@ -26,8 +9,9 @@ export const UPDATE_GRID_SIZE = "UPDATE_GRID_SIZE";
  * [row[col, col, col], row[col, col col], row[col, col, col]]
  */
 export const createCells = () => (dispatch) => {
-  dispatch({ type: CREATE_CELLS_START });
-  return { type: CREATE_CELLS_FINISHED };
+  
+  dispatch({ type: types.CREATE_CELLS });
+  return { type: types.CREATE_CELLS_FINISHED };
 };
 
 export const randomGeneration = (cols, rows)  => {
@@ -54,23 +38,23 @@ export const randomGeneration = (cols, rows)  => {
 
   console.log(_cells);
 
-  return { type: CREATE_RANDOM_GENERATION_END, payload: {cells: _cells, population: count} };
+  return { type: types.CREATE_RANDOM_GENERATION_END, payload: {cells: _cells, population: count} };
 };
 
 export const toggleCell = (id) => {
-  return { type: TOGGLE_CELL, payload: id };
+  return { type: types.TOGGLE_CELL, payload: id };
 };
 
 export const startSimulation = () => {
-  return { type: START_SIMULATION };
+  return { type: types.START_SIMULATION };
 };
 
 export const pauseSimulation = () => {
-  return { type: PAUSE_SIMULATION };
+  return { type: types.PAUSE_SIMULATION };
 };
 
 export const stopSimulation = () => {
-  return { type: STOP_SIMULATION };
+  return { type: types.STOP_SIMULATION };
 };
 
 const createNextGeneration = (cols, rows) => {
@@ -136,16 +120,16 @@ export const handleLife = (prev_generation, cols, rows) => {
     }
   }
   return {
-    type: CREATE_NEXT_GENERATION_START,
+    type: types.CREATE_NEXT_GENERATION_START,
     payload: { next_generation, population_count: count },
   };
 };
 export const finish_life = () => {
-  return { type: CREATE_NEXT_GENERATION_END };
+  return { type: types.CREATE_NEXT_GENERATION_END };
 };
 export const updateGridSize = (val) => {
-  return { type: UPDATE_GRID_SIZE, payload: val };
+  return { type: types.UPDATE_GRID_SIZE, payload: val };
 };
 export const updateSimSpeed = (val) => {
-  return { type: UPDATE_SIMULATION_SPEED, payload: val };
+  return { type: types.UPDATE_SIMULATION_SPEED, payload: val };
 };
