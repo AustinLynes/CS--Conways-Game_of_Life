@@ -7,7 +7,7 @@ const ___CELL_SIZE__ = 24;
 const __GRID_ROWS__ = Math.floor(__GRID_HEIGHT__ / ___CELL_SIZE__);
 const __GRID_COLS__ = Math.floor(__GRID_WIDTH__ / ___CELL_SIZE__);
 
-const init = {
+export const init = {
   cells: [],
   is_generating: false,
   is_toggling: false,
@@ -81,6 +81,11 @@ export function gridReducer(state = init, action) {
         population: 0,
         generation: 0,
       };
+    case types.PAUSE_SIMULATION:
+      return {
+        ...state,
+        is_simulating:false
+      }
     case types.UPDATE_SIMULATION_SPEED:
       return {
         ...state,
