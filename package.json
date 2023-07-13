@@ -44,7 +44,7 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^4.8.0",
+    "cypress": "^4.12.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-mock-store": "^1.5.4",
     "remote-redux-devtools": "^0.5.16"
